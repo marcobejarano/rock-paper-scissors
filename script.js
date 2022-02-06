@@ -1,33 +1,33 @@
 function computerPlay() {
     let choice = Math.random();
     if (choice < 0.33) {
-        return "rock";
+        return "Rock";
     } else if (choice >= 0.33 && choice < 0.66) {
-        return "paper";
+        return "Paper";
     } else {
-        return "scissors";
+        return "Scissors";
     }
 }
 
 function playRound(playerSelection, computerSelection) {
     let result = "";
-    if (playerSelection == "rock" && computerSelection == "rock") {
+    if (playerSelection == "Rock" && computerSelection == "Rock") {
         result += "It is a draw!";
-    } else if (playerSelection == "rock" && computerSelection == "paper") {
+    } else if (playerSelection == "Rock" && computerSelection == "Paper") {
         result += "You lost! Paper beats Rock";
-    } else if (playerSelection == "rock" && computerSelection == "scissors") {
+    } else if (playerSelection == "Rock" && computerSelection == "Scissors") {
         result += "You won! Rock beats Scissors";
-    } else if (playerSelection == "paper" && computerSelection == "paper") {
+    } else if (playerSelection == "Paper" && computerSelection == "Paper") {
         result += "It is a draw!";
-    } else if (playerSelection == "paper" && computerSelection == "scissors") {
+    } else if (playerSelection == "Paper" && computerSelection == "Scissors") {
         result += "You lost! Scissors beats Paper";
-    } else if (playerSelection == "paper" && computerSelection == "rock") {
+    } else if (playerSelection == "Paper" && computerSelection == "Rock") {
         result += "You won! Paper beats Rock";
-    } else if (playerSelection == "scissors" && computerSelection == "scissors") {
+    } else if (playerSelection == "Scissors" && computerSelection == "Scissors") {
         result += "It is a draw!";
-    } else if (playerSelection == "scissors" && computerSelection == "rock") {
+    } else if (playerSelection == "Scissors" && computerSelection == "Rock") {
         result += "You lost! Rock beats Scissors";
-    } else if (playerSelection == "scissors" &&  computerSelection == "paper") {
+    } else if (playerSelection == "Scissors" &&  computerSelection == "Paper") {
         result += "You won! Scissors beats Paper";
     } else {
         result += "Please, type correctly";
@@ -35,44 +35,40 @@ function playRound(playerSelection, computerSelection) {
     return result;
 }
 
-function game() {
-    let computerCount = 0;
-    let playerCount = 0;
-    let score = "";
+let computerCount = 0;
+let playerCount = 0;
+let gameResult = '';
 
-    for (let i = 0; i < 5; i++) {
-        let input = prompt("Please, type your choice:");
-        let playerSelection = input.toLowerCase();
+let buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        let playerSelection = button.innerText;
         let computerSelection = computerPlay();
-        let match = playRound(playerSelection, computerSelection);
-
-        score += `Your choice was: ${playerSelection}<br>
-                  Computer choice was: ${computerSelection}<br>
-                  ${match}<br><br>`;
-
-        if (match == "You lost! Paper beats Rock" ||
-            match == "You lost! Scissors beats Paper" ||
-            match == "You lost! Rock beats Scissors") {
+        let playResult = playRound(playerSelection, computerSelection);
+    
+        if (playResult === "You lost! Paper beats Rock" ||
+        playResult === "You lost! Scissors beats Paper" ||
+        playResult === "You lost! Rock beats Scissors") {
             computerCount += 1;
-        } else if (match == "You won! Rock beats Scissors" ||
-                   match == "You won! Paper beats Rock" ||
-                   match == "You won! Scissors beats Paper") {
+        } else if (playResult === "You won! Rock beats Scissors" ||
+        playResult === "You won! Paper beats Rock" ||
+        playResult === "You won! Scissors beats Paper") {
             playerCount += 1;
-        } else {
-            continue;
         }
-    }
-
-    let finalScore = score + `Computer count: ${computerCount}<br>
-                     Player count: ${playerCount}<br>`;
-
-    if (computerCount > playerCount) {
-        return finalScore + "You lost the game!";
-    } else if (computerCount < playerCount) {
-        return finalScore + "You won the game!";
-    } else {
-        return finalScore + "It is a final draw!";
-    }
-}
-
-document.getElementById("final").innerHTML = game();
+    
+        gameResult = `Player Selection: ${playerSelection}\n` +
+        `Computer Selection: ${computerSelection}\n` +
+        `${playResult}\n` + `Computer Count: ${computerCount}\n` +
+        `Player Count: ${playerCount}` + '\n\n';
+    
+        if (computerCount == 5) {
+            gameResult += '\nYou lost the game!!\nThe game is over.\n' +
+              'Refresh the page for a new game\n';
+        } else if (playerCount == 5) {
+            gameResult += '\nYou won the game!!\nThe game is over.\n' +
+              'Refresh the page for a new game\n';
+        }
+    
+        document.getElementById('myID').innerText += gameResult; 
+    })
+});
